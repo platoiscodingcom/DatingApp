@@ -36,7 +36,20 @@ namespace API.Controllers
     public async Task<ActionResult<MemberDto>> GetUser(string username)
     {
       return await _userRepository.GetMemberAsync(username);
-      
+
+    }
+
+    [HttpPut]
+    public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
+    {
+
+      var user = await UserRepository.GetUserByUsernameAsync(User.GetUsername());
+
+      _mapper.Map(memberUpdateDto, user);
+
+      UserRepository.Update(user);
+
+      return BadRequest("Failed to update user");
     }
   }
 }
