@@ -1,3 +1,5 @@
+
+using System;
 using API.Data;
 using API.Helpers;
 using API.Interfaces;
@@ -13,13 +15,16 @@ namespace API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
+            services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
-            services.AddDbContext<DataContext>(Options => 
-                Options.UseSqlite(config.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DataContext>(Options => {
+                Options.UseSqlite(config.GetConnectionString("DefaultConnection"));
+            });
 
-                return services;
+            return services;
 
         }
 
